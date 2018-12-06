@@ -27,7 +27,7 @@ class Line extends Object {
     });
 
     // Create the object
-    super(position, new THREE.Line(geometry, material));
+    super(new THREE.Line(geometry, material), position);
   }
 
   // Methods
@@ -46,9 +46,7 @@ class Line extends Object {
 
   // Getters and setters
   get start() {
-    return new Position(
-      this.position.vector.add(this.object3d.geometry.vertices[0])
-    );
+    return new Position(this.position.vector.add(this.object3d.geometry.vertices[0]));
   }
 
   set start(start) {
@@ -61,9 +59,7 @@ class Line extends Object {
   }
 
   get end() {
-    return new Position(
-      this.position.vector.add(this.object3d.geometry.vertices[1])
-    );
+    return new Position(this.position.vector.add(this.object3d.geometry.vertices[1]));
   }
 
   set end(end) {

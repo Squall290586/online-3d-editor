@@ -7,7 +7,7 @@ import * as Colors from "@/js/three/characteristic/Colors";
 class Orthonormal extends Object {
   constructor() {
     // create a group
-    super(new Position(0, 0, 0), new THREE.Group());
+    super(new THREE.Group());
 
     // Create the 3 axes
     let x1 = new Line(new Position(0, 0, 0), new Position(10000, 0, 0));

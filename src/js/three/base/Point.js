@@ -27,16 +27,12 @@ class Point extends Object {
     });
 
     // Listen each window resize
-    window.addEventListener(
-      "resize",
-      () => {
-        material.size = getPointSize();
-      },
-      false
-    );
+    window.addEventListener("resize", () => {
+      material.size = getPointSize();
+    }, false);
 
     // Create the object
-    super(center, new THREE.Points(geometry, material));
+    super(new THREE.Points(geometry, material), center);
   }
 
   // Getter and setters

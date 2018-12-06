@@ -1,7 +1,6 @@
 import * as Utils from "@/utils";
 import * as THREE from "three";
 import { Object } from "@/js/three/base/Object";
-import { Position } from "@/js/three/characteristic/Position";
 import { Scene } from "@/js/three/Scene";
 
 // Privqte
@@ -33,7 +32,7 @@ class Camera extends Object {
     xAngleGroup.add(camera);
 
     // create a group
-    super(new Position(0, 0, 0), zAngleGroup);
+    super(zAngleGroup);
 
     // Set attributes
     this.scene = scene;
@@ -49,15 +48,11 @@ class Camera extends Object {
     });
 
     // Remake a aspect when the window is resize
-    window.addEventListener(
-      "resize",
-      () => {
-        me.camera.aspect = window.innerWidth / window.innerHeight;
-        me.camera.updateProjectionMatrix();
-        me.renderer.setSize(window.innerWidth, window.innerHeight);
-      },
-      false
-    );
+    window.addEventListener("resize", () => {
+      me.camera.aspect = window.innerWidth / window.innerHeight;
+      me.camera.updateProjectionMatrix();
+      me.renderer.setSize(window.innerWidth, window.innerHeight);
+    }, false);
 
     // Set the defaulkt settings
     this.distance = 100;
@@ -102,20 +97,23 @@ class Camera extends Object {
   }
 
   /**
-   *
+   * 
    * The angle of the camera.
-   *
+   * 
    * It allow to up or down the camera view.
    *
    * It's a number that represents the angle with horizontal plan.
    * The angle is expressed in degrees.
    * The range is [90, -90].
-   *
-   * @throws An exception if the setted value isn't a number.
+   * 
+   * @throws An exception if the setted value isn't a number. 
    */
   get angle() {
     // Get the radian angle
-    let radianAngle = this.object3d.children[0].rotation.x;
+    let radianAngle = this.object3d
+      .children[0]
+      .rotation
+      .x;
 
     // Convert into degrees and return it
     return Math.round(180 * ((Math.PI / 2 - radianAngle) / Math.PI));
@@ -134,10 +132,13 @@ class Camera extends Object {
     }
 
     // Calcul the radian angle
-    let radianAngle = (-angle / 180) * Math.PI + Math.PI / 2;
+    let radianAngle = ((-angle / 180) * Math.PI) + Math.PI / 2;
 
     // Apply the angle on the xAngleGroup object
-    this.object3d.children[0].rotation.x = radianAngle;
+    this.object3d
+      .children[0]
+      .rotation
+      .x = radianAngle;
 
     // Fire the events
     this.emit("change", this);
@@ -145,20 +146,22 @@ class Camera extends Object {
   }
 
   /**
-   *
+   * 
    * The rotation of the camera.
-   *
+   * 
    * It allow to rotate the camera view.
    *
    * It's a number that represents the rotation with Z index.
    * The angle is expressed in degrees.
    * The range is [0, 359].
-   *
-   * @throws An exception if the setted value isn't a number.
+   * 
+   * @throws An exception if the setted value isn't a number. 
    */
   get rotation() {
     // Get the radian angle
-    let radianAngle = this.object3d.rotation.z;
+    let radianAngle = this.object3d
+      .rotation
+      .z;
 
     // Convert into degrees and return it
     return Math.round((radianAngle / Math.PI) * 180);
@@ -178,7 +181,9 @@ class Camera extends Object {
     let radianAngle = (rotation / 180) * Math.PI;
 
     // Apply the angle on the zAngleGroup object
-    this.object3d.rotation.z = radianAngle;
+    this.object3d
+      .rotation
+      .z = radianAngle;
 
     // Fire the events
     this.emit("change", this);
@@ -186,17 +191,21 @@ class Camera extends Object {
   }
 
   /**
-   *
+   * 
    * The distance of the camera.
-   *
+   * 
    * It allow to remote the camera view.
    *
    * It's a number that represents the distance.
-   *
-   * @throws An exception if the setted value isn't a number.
+   * 
+   * @throws An exception if the setted value isn't a number. 
    */
   get distance() {
-    return this.object3d.children[0].children[0].position.z;
+    return this.object3d
+      .children[0]
+      .children[0]
+      .position
+      .z;
   }
 
   set distance(distance) {
@@ -204,7 +213,11 @@ class Camera extends Object {
     Utils.isNumber(distance);
 
     // Apply the distance
-    this.object3d.children[0].children[0].position.z = distance;
+    this.object3d
+      .children[0]
+      .children[0]
+      .position
+      .z = distance;
 
     // Fire the events
     this.emit("change", this);

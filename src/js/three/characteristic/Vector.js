@@ -1,9 +1,10 @@
 import * as THREE from "three";
 import * as Utils from "@/utils";
 
-class Vector {
+class Vector extends Event {
   // Constructor
   constructor(xOrVector, y, z) {
+    super();
     xOrVector = xOrVector || 0;
     y = y || 0;
     z = z || 0;
@@ -51,6 +52,10 @@ class Vector {
   set x(x) {
     Utils.isNumber(x);
     this._vector.x = x;
+
+    // Fire the events
+    this.emit("change", this);
+    this.emit("x", this, x);
   }
 
   get y() {
@@ -60,6 +65,10 @@ class Vector {
   set y(y) {
     Utils.isNumber(y);
     this._vector.y = y;
+
+    // Fire the events
+    this.emit("change", this);
+    this.emit("y", this, y);
   }
 
   get z() {
@@ -69,6 +78,10 @@ class Vector {
   set z(z) {
     Utils.isNumber(z);
     this._vector.z = z;
+
+    // Fire the events
+    this.emit("change", this);
+    this.emit("z", this, z);
   }
 
   get vector() {
@@ -78,6 +91,10 @@ class Vector {
   set vector(vector) {
     Utils.isInstanceOf(vector, THREE.Vector3);
     this._vector = vector;
+
+    // Fire the events
+    this.emit("change", this);
+    this.emit("vector", this, vector);
   }
 }
 

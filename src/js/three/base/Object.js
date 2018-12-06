@@ -1,27 +1,35 @@
 import Event from "events";
 import * as THREE from "three";
+import * as Optional from "optional-js";
 import * as Utils from "@/utils";
 import { Position } from "@/js/three/characteristic/Position";
+import { Rotation } from "@/js/three/characteristic/Rotation";
 import { Scene } from "@/js/three/Scene";
 
 function beforeCalculCenter(object) {
-  object.childrens.forEach(children => {
-    children.position = children.position.add(object.position);
-  });
+  object
+    .childrens
+    .forEach(children => {
+      children.position = children.position.add(object.position);
+    });
 
   return object;
 }
 
 function calculCenter(object) {
   let center = new Position();
-  object.childrens.forEach(children => {
-    center = center.add(children.position);
-  });
+  object
+    .childrens
+    .forEach(children => {
+      center = center.add(children.position);
+    });
   center = center.divide(object.childrens.length);
   object.position = center;
-  object.childrens.forEach(children => {
-    children.position = children.position.sub(object.position);
-  });
+  object
+    .childrens
+    .forEach(children => {
+      children.position = children.position.sub(object.position);
+    });
 
   // return the object
   return object;
@@ -29,25 +37,31 @@ function calculCenter(object) {
 
 class Object extends Event {
   /**
-   *
+   * 
    * Allow to create a simple object.
-   *
-   * @param {Position} position Position of the object
+   * 
    * @param {THREE.Object3D} object3d The ThreeJS Object3D
+   * @param {Position} [position] Position of the object
+   * @param {Rotation} [rotation] Rotation of the object
    */
-  constructor(position, object3d) {
+  constructor(object3d, position, rotation) {
     super();
     this.object3d = object3d;
-    this.position = position;
+    this.position = Optional
+      .ofNullable(position)
+      .orElse(new Position());
+    this.rotation = Optional
+      .ofNullable(rotation)
+      .orElse(new Rotation());
     this.childrens = [];
   }
 
   /**
-   *
+   * 
    * Add a sub object.
-   *
+   * 
    * @param {Object} object The adding object
-   *
+   * 
    */
   add(object) {
     // Check the class
@@ -69,11 +83,11 @@ class Object extends Event {
   }
 
   /**
-   *
+   * 
    * Remove a sub object.
-   *
+   * 
    * @param {Object} object The removed object
-   *
+   * 
    */
   remove(object) {
     // Check the class
@@ -98,9 +112,9 @@ class Object extends Event {
   }
 
   /**
-   *
+   * 
    * The position of the object.
-   *
+   * 
    */
   get position() {
     let vector = this.object3d.position;
@@ -119,9 +133,9 @@ class Object extends Event {
   }
 
   /**
-   *
+   * 
    * The THREE.Object3D
-   *
+   * 
    */
   get object3d() {
     return this._object3d;
@@ -176,7 +190,7 @@ class Object extends Event {
 
   set isTransparent(isTransparent) {
     this.object3d.material.transparent = isTransparent;
-    this.object3d.material.opacity = isTransparent ? 0.35 : 1;
+    this.object3d.material.opacity = (isTransparent) ? 0.35 : 1;
 
     // Fire the events
     this.emit("change", this);

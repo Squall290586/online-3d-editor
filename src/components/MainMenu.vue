@@ -23,7 +23,7 @@
       <v-divider></v-divider>
 
       <template v-for="item in items">
-        <v-list-group v-if="item.items" :prepend-icon="item.icon">
+        <v-list-group :key="item.title" v-if="item.items" :prepend-icon="item.icon">
           <v-list-tile slot="activator">
             <v-list-tile-title>{{item.title}}</v-list-tile-title>
           </v-list-tile>

@@ -13,6 +13,11 @@ export default {
 </script>
 
 <style>
+
+html {
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   font-family: Roboto, RobotoDraft, Arial, sans-serif;

@@ -2,6 +2,7 @@ import Event from "events";
 import * as THREE from "three";
 import * as Utils from "@/utils";
 import { Base } from "@/js/three/base/Base";
+import * as Colors from "@/js/three/characteristic/Colors";
 
 /**
  * This object allow to memorise a objects list
@@ -13,6 +14,7 @@ class Scene extends Event {
 
     // Init the scene
     this._scene = new THREE.Scene();
+    this._scene.background = new THREE.Color(Colors.WHITE);
   }
 
   add(base) {

@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div style="width: 100%; height: 100%; ">
     <main-menu></main-menu>
     <options></options>
+    <div ref="canvas" style="width: 100%; height: 100%; "></div>
   </div>
 </template>
 
@@ -24,7 +25,7 @@ export default {
   },
   mounted: function() {
     this.scene = new Three.Scene();
-    this.camera = new Three.Camera(this.scene, this.$el);
+    this.camera = new Three.Camera(this.scene, this.$refs.canvas);
 
     let pp = new Three.base.Point(new Three.characteristic.Position(20, 0, 0));
     let line1 = new Three.base.Line(
@@ -60,5 +61,5 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 </style>

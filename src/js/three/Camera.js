@@ -21,8 +21,10 @@ class Camera extends Base {
     );
 
     // Init the renderer canvas
-    let renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    let renderer = new THREE.WebGLRenderer({
+      antialias: true
+    });
+    renderer.setSize(domTarget.clientWidth, domTarget.clientHeight);
     domTarget.appendChild(renderer.domElement);
 
     // Init the 2 parent group for the angle gestion
@@ -48,11 +50,15 @@ class Camera extends Base {
     });
 
     // Remake a aspect when the window is resize
-    window.addEventListener("resize", () => {
-      me.camera.aspect = window.innerWidth / window.innerHeight;
-      me.camera.updateProjectionMatrix();
-      me.renderer.setSize(window.innerWidth, window.innerHeight);
-    }, false);
+    window.addEventListener(
+      "resize",
+      () => {
+        me.camera.aspect = window.innerWidth / window.innerHeight;
+        me.camera.updateProjectionMatrix();
+        me.renderer.setSize(window.innerWidth, window.innerHeight);
+      },
+      false
+    );
 
     // Set the defaulkt settings
     this.distance = 100;
@@ -97,20 +103,21 @@ class Camera extends Base {
   }
 
   /**
-   * 
+   *
    * The angle of the camera.
-   * 
+   *
    * It allow to up or down the camera view.
    *
    * It's a number that represents the angle with horizontal plan.
    * The angle is expressed in degrees.
    * The range is [90, -90].
-   * 
+   *
    * @throws An exception if the setted value isn't a number. 
    */
   get angle() {
     // Get the radian angle
-    let radianAngle = this.object3d
+    let radianAngle = this
+      .object3d
       .children[0]
       .rotation
       .x;

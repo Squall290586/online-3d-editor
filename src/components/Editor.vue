@@ -1,17 +1,20 @@
 <template>
   <div>
     <main-menu></main-menu>
+    <options></options>
   </div>
 </template>
 
 <script>
 import MainMenu from "./MainMenu";
+import Options from "./Options";
 import * as Three from "@/js/three";
 
 export default {
   name: "Editor",
   components: {
-    MainMenu
+    MainMenu,
+    Options
   },
   data: function() {
     return {

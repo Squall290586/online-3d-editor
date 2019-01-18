@@ -1,3 +1,4 @@
+import Event from "events";
 import * as THREE from "three";
 import * as Utils from "@/utils";
 

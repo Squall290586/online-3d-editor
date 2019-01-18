@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import { Object } from "@/js/three/base/Object";
+import { Base } from "@/js/three/base/Base";
 import { Line } from "@/js/three/base/Line";
 import { Position } from "@/js/three/characteristic/Position";
 import * as Colors from "@/js/three/characteristic/Colors";
 
-class Orthonormal extends Object {
+class Orthonormal extends Base {
   constructor() {
     // create a group
     super(new THREE.Group());

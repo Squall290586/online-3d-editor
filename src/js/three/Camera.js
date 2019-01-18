@@ -1,15 +1,15 @@
 import * as Utils from "@/utils";
 import * as THREE from "three";
-import { Object } from "@/js/three/base/Object";
+import { Base } from "@/js/three/base/Base";
 import { Scene } from "@/js/three/Scene";
 
-// Privqte
+// Private
 function refresh(camera) {
   camera.renderer.render(camera.scene.scene, camera.camera);
 }
 
 // Public
-class Camera extends Object {
+class Camera extends Base {
   // Constructor
   constructor(scene, domTarget) {
     // Init the camera

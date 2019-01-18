@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import * as Utils from "@/utils";
-import { Object } from "@/js/three/base/Object";
+import { Base } from "@/js/three/base/Base";
 import * as Colors from "@/js/three/characteristic/Colors";
 
-class Point extends Object {
+class Point extends Base {
   // Constructor
   constructor(center) {
     // Private method
@@ -31,7 +31,7 @@ class Point extends Object {
       material.size = getPointSize();
     }, false);
 
-    // Create the object
+    // Create the base
     super(new THREE.Points(geometry, material), center);
   }
 

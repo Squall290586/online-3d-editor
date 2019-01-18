@@ -3,46 +3,46 @@ import * as THREE from "three";
 import * as Optional from "optional-js";
 import * as Utils from "@/utils";
 import { Position } from "@/js/three/characteristic/Position";
-import { Rotation } from "@/js/three/characteristic/Rotation";
+//import { Rotation } from "@/js/three/characteristic/Rotation";
 import { Scene } from "@/js/three/Scene";
 
-function beforeCalculCenter(object) {
-  object
+function beforeCalculCenter(base) {
+  base
     .childrens
     .forEach(children => {
-      children.position = children.position.add(object.position);
+      children.position = children.position.add(base.position);
     });
 
-  return object;
+  return base;
 }
 
-function calculCenter(object) {
+function calculCenter(base) {
   let center = new Position();
-  object
+  base
     .childrens
     .forEach(children => {
       center = center.add(children.position);
     });
-  center = center.divide(object.childrens.length);
-  object.position = center;
-  object
+  center = center.divide(base.childrens.length);
+  base.position = center;
+  base
     .childrens
     .forEach(children => {
-      children.position = children.position.sub(object.position);
+      children.position = children.position.sub(base.position);
     });
 
-  // return the object
-  return object;
+  // return the base
+  return base;
 }
 
-class Object extends Event {
+class Base extends Event {
   /**
    * 
-   * Allow to create a simple object.
+   * Allow to create a simple base.
    * 
    * @param {THREE.Object3D} object3d The ThreeJS Object3D
-   * @param {Position} [position] Position of the object
-   * @param {Rotation} [rotation] Rotation of the object
+   * @param {Position} [position] Position of the base
+   * @param {Rotation} [rotation] Rotation of the base
    */
   constructor(object3d, position, rotation) {
     super();
@@ -50,55 +50,55 @@ class Object extends Event {
     this.position = Optional
       .ofNullable(position)
       .orElse(new Position());
-    this.rotation = Optional
+    /*this.rotation = Optional
       .ofNullable(rotation)
-      .orElse(new Rotation());
+      .orElse(new Rotation());*/
     this.childrens = [];
   }
 
   /**
    * 
-   * Add a sub object.
+   * Add a sub base.
    * 
-   * @param {Object} object The adding object
+   * @param {Base} base The adding base
    * 
    */
-  add(object) {
+  add(base) {
     // Check the class
-    Utils.isInstanceOf(object, Object);
+    Utils.isInstanceOf(base, Base);
 
     // Prerequisites
     beforeCalculCenter(this);
 
-    // Add the object
-    this.object3d.add(object.object3d);
-    this.childrens.push(object);
+    // Add the base
+    this.object3d.add(base.object3d);
+    this.childrens.push(base);
 
     // Calcul the center
     calculCenter(this);
 
     // Fire the events
     this.emit("change", this);
-    this.emit("add", this, object);
+    this.emit("add", this, base);
   }
 
   /**
    * 
-   * Remove a sub object.
+   * Remove a sub base.
    * 
-   * @param {Object} object The removed object
+   * @param {Base} base The removed base
    * 
    */
-  remove(object) {
+  remove(base) {
     // Check the class
-    Utils.isInstanceOf(object, Object);
+    Utils.isInstanceOf(base, Base);
 
     // Prerequisites
     beforeCalculCenter(this);
 
-    // Remove the object
-    this.object3d.remove(object.object3d);
-    let index = this.childrens.indexOf(object);
+    // Remove the base
+    this.object3d.remove(base.object3d);
+    let index = this.childrens.indexOf(base);
     if (index >= 0) {
       this.childrens.splice(index, 1);
     }
@@ -108,12 +108,12 @@ class Object extends Event {
 
     // Fire the events
     this.emit("change", this);
-    this.emit("remove", this, object);
+    this.emit("remove", this, base);
   }
 
   /**
    * 
-   * The position of the object.
+   * The position of the base.
    * 
    */
   get position() {
@@ -190,7 +190,7 @@ class Object extends Event {
 
   set isTransparent(isTransparent) {
     this.object3d.material.transparent = isTransparent;
-    this.object3d.material.opacity = (isTransparent) ? 0.35 : 1;
+    this.object3d.material.opacity = isTransparent ? 0.35 : 1;
 
     // Fire the events
     this.emit("change", this);
@@ -198,4 +198,4 @@ class Object extends Event {
   }
 }
 
-export { Object };
+export { Base };

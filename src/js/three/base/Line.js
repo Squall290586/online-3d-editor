@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import * as Utils from "@/utils";
-import { Object } from "@/js/three/base/Object";
+import { Base } from "@/js/three/base/Base";
 import { Position } from "@/js/three/characteristic/Position";
 import * as Colors from "@/js/three/characteristic/Colors";
 
-class Line extends Object {
+class Line extends Base {
   // Constructor
   constructor(start, end) {
     // Check arguments
@@ -26,7 +26,7 @@ class Line extends Object {
       color: Colors.GRAY
     });
 
-    // Create the object
+    // Create the base
     super(new THREE.Line(geometry, material), position);
   }
 

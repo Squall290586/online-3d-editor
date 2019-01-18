@@ -1,7 +1,7 @@
 import Event from "events";
 import * as THREE from "three";
 import * as Utils from "@/utils";
-import { Object } from "@/js/three/base/Object";
+import { Base } from "@/js/three/base/Base";
 
 /**
  * This object allow to memorise a objects list
@@ -15,18 +15,18 @@ class Scene extends Event {
     this._scene = new THREE.Scene();
   }
 
-  add(object) {
-    // Check the object
-    Utils.isInstanceOf(object, Object);
+  add(base) {
+    // Check the base
+    Utils.isInstanceOf(base, Base);
 
-    // Set the scene on the object and add it
-    object.scene = this;
-    this._scene.add(object.object3d);
+    // Set the scene on the base and add it
+    base.scene = this;
+    this._scene.add(base.object3d);
 
     // Event gestion
     this.emit("change", this);
-    this.emit("add", this, object);
-    object.on("change", object => this.emit("change", this));
+    this.emit("add", this, base);
+    base.on("change", base => this.emit("change", this));
   }
 
   get scene() {

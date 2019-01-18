@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import * as Optional from "optional-js";
 import * as Utils from "@/utils";
-import { Object } from "@/js/three/base/Object";
+import { Base } from "@/js/three/base/Base";
 import { Line } from "@/js/three/base/Line";
 
 function checkLines(curve) {
@@ -18,13 +18,13 @@ function checkLines(curve) {
   }
 }
 
-class Curve extends Object {
+class Curve extends Base {
   // Constructor
   constructor(lines) {
     // Variables
     lines = Optional.ofNullable(lines);
 
-    // Create the object
+    // Create the base
     super(new THREE.Group());
 
     // Loop on all lines and check it
@@ -33,7 +33,7 @@ class Curve extends Object {
 
   // Methods
   add(line) {
-    // Check object
+    // Check base
     Utils.isInstanceOf(line, Line);
 
     // Add the line
@@ -44,7 +44,7 @@ class Curve extends Object {
   }
 
   remove(line) {
-    // Check object
+    // Check base
     Utils.isInstanceOf(line, Line);
 
     // Add the line

@@ -6,7 +6,7 @@
 
 <script>
 import MainMenu from "./MainMenu";
-// import * as Three from "@/js/three";
+import * as Three from "@/js/three";
 
 export default {
   name: "Editor",
@@ -20,7 +20,7 @@ export default {
     };
   },
   mounted: function() {
-    /*this.scene = new Three.Scene();
+    this.scene = new Three.Scene();
     this.camera = new Three.Camera(this.scene, this.$el);
 
     let pp = new Three.base.Point(new Three.characteristic.Position(20, 0, 0));
@@ -52,7 +52,7 @@ export default {
     pp.color = 0x1111ff;
     window.camera = this.camera;
     window.curve = curve;
-    window.line3 = line3;*/
+    window.line3 = line3;
   }
 };
 </script>

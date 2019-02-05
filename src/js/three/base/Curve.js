@@ -81,6 +81,33 @@ class Curve extends Base {
       .map(start => start.equals(this.end))
       .orElse(false);
   }
+
+  get normal() {
+    return this
+      .childrens
+      .map(one => {
+        let index = this.childrens.indexOf(one);
+        let two = (index + 1 === this.childrens.length) ? this.childrens[0] : this.childrens[index + 1];
+        let v1 = one.end.sub(one.start);
+        let v2 = two.end.sub(two.start);
+        return v1.cross(v2);
+      })
+      .reduce((one, two) => {
+        if (!one.equals(two)) {
+          throw "The filled curve haven't the same normal for all lines.";
+        }
+        return one;
+      })
+      .normalize();
+  }
+
+  get isPlan() {
+    try {
+      return !!this.normal;
+    } catch {
+      return false;
+    }
+  }
 }
 
 export { Curve };

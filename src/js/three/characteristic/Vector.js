@@ -45,6 +45,15 @@ class Vector extends Event {
     return this.vector.equals(vector.vector);
   }
 
+  cross(vector) {
+    Utils.isInstanceOf(vector, Vector);
+    return new Vector(this.vector.cross(vector.vector));
+  }
+
+  normalize() {
+    return new Vector(this.vector.normalize());
+  }
+
   // Getters and setters
   get x() {
     return this._vector.x;

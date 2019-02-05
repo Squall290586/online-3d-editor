@@ -30,21 +30,38 @@ export default {
     let pp = new Three.base.Point(new Three.characteristic.Position(20, 0, 0));
     let line1 = new Three.base.Line(
       new Three.characteristic.Position(20, 0, 0),
-      new Three.characteristic.Position(20, 20, 20)
+      new Three.characteristic.Position(20, 20, 0)
     );
     let line2 = new Three.base.Line(
-      new Three.characteristic.Position(20, 20, 20),
-      new Three.characteristic.Position(30, 30, 30)
+      new Three.characteristic.Position(20, 20, 0),
+      new Three.characteristic.Position(0, 20, 0)
     );
     let line3 = new Three.base.Line(
-      new Three.characteristic.Position(30, 30, 30),
-      new Three.characteristic.Position(20, 45, 40)
+      new Three.characteristic.Position(0, 20, 0),
+      new Three.characteristic.Position(0, 0, 0)
     );
     let line4 = new Three.base.Line(
-      new Three.characteristic.Position(20, 45, 40),
+      new Three.characteristic.Position(0, 0, 0),
       new Three.characteristic.Position(20, 0, 0)
     );
-    let curve = new Three.base.Curve([line1, line2, line3, line4]);
+    let curve = new Three.base.Face(new Three.base.Curve([line1, line2, line3, line4]));
+    let line11 = new Three.base.Line(
+      new Three.characteristic.Position(20, 0, 20),
+      new Three.characteristic.Position(20, 20, 20)
+    );
+    let line12 = new Three.base.Line(
+      new Three.characteristic.Position(20, 20, 20),
+      new Three.characteristic.Position(0, 20, 20)
+    );
+    let line13 = new Three.base.Line(
+      new Three.characteristic.Position(0, 20, 20),
+      new Three.characteristic.Position(0, 0, 20)
+    );
+    let line14 = new Three.base.Line(
+      new Three.characteristic.Position(0, 0, 20),
+      new Three.characteristic.Position(20, 0, 20)
+    );
+    let curve1 = new Three.base.Face(new Three.base.Curve([line11, line12, line13, line14]));
     let orthonormal = new Three.Orthonormal();
 
     this.camera.xAngle = 10;
@@ -52,6 +69,7 @@ export default {
     this.scene.add(this.camera);
     this.scene.add(pp);
     this.scene.add(curve);
+    this.scene.add(curve1);
     this.scene.add(orthonormal);
     pp.color = 0x1111ff;
     window.camera = this.camera;

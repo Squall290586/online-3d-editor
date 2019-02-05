@@ -3,7 +3,6 @@ import * as THREE from "three";
 import * as Optional from "optional-js";
 import * as Utils from "@/utils";
 import { Position } from "@/js/three/characteristic/Position";
-//import { Rotation } from "@/js/three/characteristic/Rotation";
 import { Scene } from "@/js/three/Scene";
 
 function beforeCalculCenter(base) {
@@ -42,17 +41,13 @@ class Base extends Event {
    * 
    * @param {THREE.Object3D} object3d The ThreeJS Object3D
    * @param {Position} [position] Position of the base
-   * @param {Rotation} [rotation] Rotation of the base
    */
-  constructor(object3d, position, rotation) {
+  constructor(object3d, position) {
     super();
     this.object3d = object3d;
     this.position = Optional
       .ofNullable(position)
       .orElse(new Position());
-    /*this.rotation = Optional
-      .ofNullable(rotation)
-      .orElse(new Rotation());*/
     this.childrens = [];
   }
 

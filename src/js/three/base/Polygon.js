@@ -2,7 +2,6 @@ import * as THREE from "three";
 import * as Optional from "optional-js";
 import * as Utils from "@/utils";
 import * as Colors from "@/js/three/characteristic/Colors";
-import { Position } from "@/js/three/characteristic/Position";
 import { Base } from "@/js/three/base/Base";
 import { Curve } from "@/js/three/base/Curve";
 import { Vector } from "@/js/three/characteristic/Vector";
@@ -21,19 +20,6 @@ class Polygon extends Base {
         return v.isLoop && v.isPlan;
       })
       .orElseThrow(() => "You must fill a planed curve with a loop.");
-
-
-    let position = new Position();
-    curve
-      .childrens
-      .forEach(l => position = position.add(l.position));
-    position = position.divide(curve.childrens.length);
-    curve
-      .childrens
-      .forEach(l => {
-        l.start = l.start.sub(position);
-        l.end = l.end.sub(position);
-      });
 
     // Get the normal of the curve
     let normal = curve.normal;
@@ -61,7 +47,7 @@ class Polygon extends Base {
     }));
 
     // Create the base
-    super(shapeMesh, position);
+    super(shapeMesh, curve.position);
   }
 }
 

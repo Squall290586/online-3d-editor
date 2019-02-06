@@ -56,6 +56,9 @@ class Camera extends Base {
         me.camera.aspect = window.innerWidth / window.innerHeight;
         me.camera.updateProjectionMatrix();
         me.renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Fire the events
+        me.emit("change", this);
       },
       false
     );

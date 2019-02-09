@@ -19,6 +19,7 @@
              fab
              small
              v-for="item in items.items"
+             @click="handleSelect(item.action)"
       >
         <v-icon v-text="item.icon"></v-icon>
       </v-btn>
@@ -44,6 +45,7 @@
              dark
              fab
              small
+             @click="handleSelect('disconnect')"
       >
         <v-icon>exit_to_app</v-icon>
       </v-btn>
@@ -90,6 +92,20 @@
           ]
         }
       };
+    },
+    methods: {
+      handleSelect(key) {
+        switch (key) {
+          case "disconnect":
+            this.signOut();
+            break;
+          default:
+            break;
+        }
+      },
+      signOut() {
+        this.$store.dispatch("userSignOut");
+      }
     }
   };
 </script>

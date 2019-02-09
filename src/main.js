@@ -5,6 +5,7 @@ import store from "./store";
 import "./registerServiceWorker";
 import "./plugins/vuetify";
 import * as firebase from "firebase";
+import './registerServiceWorker'
 
 Vue.config.productionTip = false;
 

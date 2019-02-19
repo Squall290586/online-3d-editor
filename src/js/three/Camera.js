@@ -126,7 +126,7 @@ class Camera extends Base {
       .x;
 
     // Convert into degrees and return it
-    return Math.round(180 * ((Math.PI / 2 - radianAngle) / Math.PI));
+    return 180 * ((Math.PI / 2 - radianAngle) / Math.PI);
   }
 
   set angle(angle) {
@@ -174,7 +174,7 @@ class Camera extends Base {
       .z;
 
     // Convert into degrees and return it
-    return Math.round((radianAngle / Math.PI) * 180);
+    return (radianAngle / Math.PI) * 180;
   }
 
   set rotation(rotation) {

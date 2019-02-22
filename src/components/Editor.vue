@@ -53,7 +53,6 @@ export default {
             let y = -size / 2 + j * unitSize + unitSize / 2;
             let z = -size / 2 + k * unitSize + unitSize / 2;
 
-            console.log(count++);
             this.scene.add(
               new Three.shape.Cube(
                 unitSize,

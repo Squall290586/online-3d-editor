@@ -15,11 +15,6 @@ class Scene extends Event {
     // Init the scene
     this._scene = new THREE.Scene();
     this._scene.background = new THREE.Color(Colors.WHITE);
-    let light = new THREE.DirectionalLight( 0xffffff );
-    light.position.set( 0, 0, 100 );
-    this._scene.add(light);
-
-    
   }
 
   add(base) {

@@ -42,16 +42,17 @@ export default {
         }, 5);
       });
     },
-    initScene: function(unitSize, unitSizeNumber) {
-      let size = unitSize * unitSizeNumber;
-      let count = 0;
+    initScene: function(unitSize, x, y, z) {
+      let sizeX = unitSize * x;
+      let sizeY = unitSize * y;
+      let sizeZ = unitSize * z;
 
-      for (let i = 0; i < unitSizeNumber; i++) {
-        for (let j = 0; j < unitSizeNumber; j++) {
-          for (let k = 0; k < unitSizeNumber; k++) {
-            let x = -size / 2 + i * unitSize + unitSize / 2;
-            let y = -size / 2 + j * unitSize + unitSize / 2;
-            let z = -size / 2 + k * unitSize + unitSize / 2;
+      for (let i = 0; i < x; i++) {
+        for (let j = 0; j < y; j++) {
+          for (let k = 0; k < z; k++) {
+            let x = -sizeX / 2 + i * unitSize + unitSize / 2;
+            let y = -sizeY / 2 + j * unitSize + unitSize / 2;
+            let z = -sizeZ / 2 + k * unitSize + unitSize / 2;
 
             this.scene.add(
               new Three.shape.Cube(
@@ -95,7 +96,7 @@ export default {
 
     this.camera.xAngle = 10;
     this.scene.add(this.camera);
-    this.initScene(4, 5);
+    this.initScene(4, 5, 1, 10);
   }
 };
 </script>

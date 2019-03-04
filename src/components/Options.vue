@@ -99,12 +99,25 @@
           case "disconnect":
             this.signOut();
             break;
+          case "save":
+            this.save();
+            break;
+          case "open":
+            this.load()
+            break;
           default:
             break;
         }
       },
       signOut() {
         this.$store.dispatch("userSignOut");
+      },
+      load() {
+        this.$store.dispatch("load");
+        this.$store.dispatch("chooseFile")
+      },
+      save() {
+        this.$store.dispatch("save");
       }
     }
   };

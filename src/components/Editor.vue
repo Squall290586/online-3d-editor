@@ -3,6 +3,12 @@
     <options></options>
     <div ref="canvas" style="width: 100%; height: 100%; "></div>
     <div ref="joystick"></div>
+    <v-dialog
+            v-model="dialog"
+            width="500"
+    >
+
+    </v-dialog>
   </div>
 </template>
 
@@ -11,26 +17,30 @@ import Options from "./Options";
 import * as Three from "@/js/three";
 import nipplejs from "nipplejs";
 import * as Optional from "optional-js";
+import { mapState } from 'vuex'
 
 export default {
   name: "Editor",
   components: {
     Options
   },
-  data: function() {
+  data() {
     return {
-      scene: null,
-      camera: null,
-      nippleDirecion: Optional.empty(),
+      scene: this.$store.state.scene,
+      camera: undefined,
+      nippleDirection: Optional.empty(),
       joystick: null
     };
   },
+  computed: mapState({
+    dialog: state => state.chooseFile
+  }),
   methods: {
-    applyNippleDirectionOnCamera: function() {
-      this.nippleDirecion.ifPresent(data => {
+    applyNippleDirectionOnCamera() {
+      this.nippleDirection.ifPresent(data => {
         // Rotate camera
         this.camera.rotation =
-          this.camera.rotation +
+          this.camera.rotation -
           Math.cos(data.angle) * Math.min(data.intensity, 1);
         this.camera.angle =
           this.camera.angle -
@@ -41,30 +51,9 @@ export default {
           this.applyNippleDirectionOnCamera();
         }, 5);
       });
-    },
-    initScene: function(unitSize, unitSizeNumber) {
-      let size = unitSize * unitSizeNumber;
-      let count = 0;
-
-      for (let i = 0; i < unitSizeNumber; i++) {
-        for (let j = 0; j < unitSizeNumber; j++) {
-          for (let k = 0; k < unitSizeNumber; k++) {
-            let x = -size / 2 + i * unitSize + unitSize / 2;
-            let y = -size / 2 + j * unitSize + unitSize / 2;
-            let z = -size / 2 + k * unitSize + unitSize / 2;
-
-            this.scene.add(
-              new Three.shape.Cube(
-                unitSize,
-                new Three.characteristic.Position(x, y, z)
-              )
-            );
-          }
-        }
-      }
     }
   },
-  mounted: function() {
+  mounted() {
     let _this = this;
     this.joystick = nipplejs.create({
       zone: _this.$refs.joystick,
@@ -77,25 +66,27 @@ export default {
       color: "blue"
     });
     this.joystick.on("move", (evt, data) => {
-      let alreadyPresent = this.nippleDirecion.isPresent();
-      this.nippleDirecion = Optional.ofNullable({
+      let alreadyPresent = _this.nippleDirection.isPresent();
+      _this.nippleDirection = Optional.ofNullable({
         angle: data.angle.radian,
         intensity: data.distance / 25
       });
       if (!alreadyPresent) {
-        this.applyNippleDirectionOnCamera();
+        _this.applyNippleDirectionOnCamera();
       }
     });
     this.joystick.on("end", (evt, data) => {
-      this.nippleDirecion = Optional.empty();
+      _this.nippleDirection = Optional.empty();
     });
 
-    this.scene = new Three.Scene();
     this.camera = new Three.Camera(this.scene, this.$refs.canvas);
-
     this.camera.xAngle = 10;
-    this.scene.add(this.camera);
-    this.initScene(4, 5);
+
+    this.$store.commit('setCam', this.camera)
+    this.$store.dispatch('initScene', {
+      unitSize: 4,
+      unitSizeNumber: 5
+    });
   }
 };
 </script>

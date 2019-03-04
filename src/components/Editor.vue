@@ -85,7 +85,9 @@ export default {
     this.$store.commit('setCam', this.camera)
     this.$store.dispatch('initScene', {
       unitSize: 4,
-      unitSizeNumber: 5
+      x: 5,
+      y: 1,
+      z: 10
     });
   }
 };

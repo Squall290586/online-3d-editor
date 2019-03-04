@@ -92,14 +92,16 @@ export default new Vuex.Store({
           });
     },
     initScene: (context, payload) => {
-      let size = payload.unitSize * payload.unitSizeNumber;
+      let sizeX = payload.unitSize * payload.x;
+      let sizeY = payload.unitSize * payload.y;
+      let sizeZ = payload.unitSize * payload.z;
 
-      for (let i = 0; i < payload.unitSizeNumber; i++) {
-        for (let j = 0; j < payload.unitSizeNumber; j++) {
-          for (let k = 0; k < payload.unitSizeNumber; k++) {
-            let x = -size / 2 + i * payload.unitSize + payload.unitSize / 2;
-            let y = -size / 2 + j * payload.unitSize + payload.unitSize / 2;
-            let z = -size / 2 + k * payload.unitSize + payload.unitSize / 2;
+      for (let i = 0; i < payload.x; i++) {
+        for (let j = 0; j < payload.y; j++) {
+          for (let k = 0; k < payload.z; k++) {
+            let x = -sizeX / 2 + i * payload.unitSize + payload.unitSize / 2;
+            let y = -sizeY / 2 + j * payload.unitSize + payload.unitSize / 2;
+            let z = -sizeZ / 2 + k * payload.unitSize + payload.unitSize / 2;
 
             context.state.scene.add(
                 new Three.shape.Cube(

@@ -1,9 +1,9 @@
 import Event from "events";
 import * as THREE from "three";
 import * as Optional from "optional-js";
-import * as Utils from "@/utils";
-import { Position } from "@/js/three/characteristic/Position";
-import { Scene } from "@/js/three/Scene";
+import * as Utils from "../../../utils";
+import { Position } from "../characteristic/Position";
+import { Scene } from "../Scene";
 
 function beforeCalculCenter(base) {
   base
@@ -109,7 +109,9 @@ class Base extends Event {
   /**
    * 
    * The position of the base.
-   * 
+   *
+   * @return {Position} the position of the object.
+   *
    */
   get position() {
     let vector = this.object3d.position;

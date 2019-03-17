@@ -113,6 +113,12 @@ export default new Vuex.Store({
         }
       }
     },
+    selectCube: (context, payload) => {
+      payload.rayCasting.ifPresent(o => o.toggle());
+    },
+    deleteCube: (context, payload) => {
+      payload.rayCasting.ifPresent(o => context.state.scene.remove(o));
+    },
     save: context => {
 
     },

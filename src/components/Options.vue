@@ -13,16 +13,18 @@
               v-model="options"
       >
       </v-btn>
-      <v-btn :color="item.color"
-             :key="item.title"
-             dark
-             fab
-             small
-             v-for="item in items.items"
-             @click="handleSelect(item.action)"
-      >
-        <v-icon v-text="item.icon"></v-icon>
-      </v-btn>
+      <v-tooltip :key="item.title" bottom v-for="item in items.items">
+        <v-btn :color="item.color"
+               @click="handleSelect(item.action)"
+               dark
+               fab
+               slot="activator"
+               small
+        >
+          <v-icon v-text="item.icon"></v-icon>
+        </v-btn>
+        <span>{{item.title}}</span>
+      </v-tooltip>
     </v-speed-dial>
     <v-speed-dial
             direction="bottom"
@@ -31,6 +33,7 @@
             top
             v-model="options"
     >
+
       <v-btn
               :color=items.color
               dark
@@ -41,14 +44,18 @@
         <v-icon v-text="items.icon"></v-icon>
         <v-icon>close</v-icon>
       </v-btn>
-      <v-btn
-             dark
-             fab
-             small
-             @click="handleSelect('disconnect')"
-      >
-        <v-icon>exit_to_app</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <v-btn
+                @click="handleSelect('disconnect')"
+                dark
+                fab
+                small
+                slot="activator"
+        >
+          <v-icon>exit_to_app</v-icon>
+        </v-btn>
+        <span>Deconnexion</span>
+      </v-tooltip>
     </v-speed-dial>
   </div>
 </template>
@@ -84,9 +91,9 @@
               color: "red darken-2"
             },
             {
-              title: "Partager",
-              icon: "share",
-              action: "share",
+              title: "Imprimer",
+              icon: "print",
+              action: "print",
               color: "blue darken-2"
             }
           ]
@@ -97,27 +104,33 @@
       handleSelect(key) {
         switch (key) {
           case "disconnect":
-            this.signOut();
-            break;
+            this.signOut()
+            break
           case "save":
-            this.save();
-            break;
+            this.save()
+            break
           case "open":
             this.load()
-            break;
+            break
+          case "print":
+            this.print()
+            break
           default:
-            break;
+            break
         }
       },
       signOut() {
-        this.$store.dispatch("userSignOut");
+        this.$store.dispatch("userSignOut")
       },
       load() {
-        this.$store.dispatch("load");
+        this.$store.dispatch("load")
         this.$store.dispatch("chooseFile")
       },
       save() {
-        this.$store.dispatch("save");
+        this.$store.dispatch("save")
+      },
+      print() {
+        this.$store.dispatch("print")
       }
     }
   };

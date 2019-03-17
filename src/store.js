@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import Firebase from "firebase/app";
 import router from "@/router";
 import * as Three from "@/js/three";
+import { saveAs } from 'file-saver';
 
 Vue.use(Vuex);
 
@@ -52,6 +53,9 @@ export default new Vuex.Store({
     },
     setChooseFile(state, val) {
       state.chooseFile = val;
+    },
+    setFile(state, file) {
+      state.file = file
     }
   },
   actions: {
@@ -132,6 +136,16 @@ export default new Vuex.Store({
     },
     chooseFile: context => {
       context.commit('setChooseFile', true)
+    },
+    selectFile: (context, payload) => {
+      context.commit('setFile', payload)
+      context.commit('setChooseFile', false)
+    },
+    print: context => {
+      let exporter = new THREE.STLExporter()
+      let str = exporter.parse(context.state.scene)
+      let blob = new Blob([str], {type: 'text/plain'})
+      saveAs(blob, 'file.stl')
     }
   }
 });

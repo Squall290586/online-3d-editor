@@ -64,7 +64,7 @@ class Camera extends Base {
             false
         );
 
-        // Set the defaulkt settings
+        // Set the default settings
         this.distance = 100;
         this.angle = 10;
         this.rotation = 10;

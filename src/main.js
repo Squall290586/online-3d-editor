@@ -1,11 +1,11 @@
 import Vue from "vue";
+import './plugins/vuetify'
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
 import "./plugins/vuetify";
 import * as firebase from "firebase";
-import './registerServiceWorker'
 
 Vue.config.productionTip = false;
 

@@ -1,8 +1,11 @@
 <template>
   <div style="width: 100%; height: 100%; ">
     <options></options>
-    <div @click="onClick($event)" ref="canvas" style="width: 100%; height: 100%;"></div>
-    <div ref="joystick"></div>
+    <div @mousedown="onClick" ref="canvas" style="width: 100%; height: 100%;"></div>
+    <v-layout column fill-height class="controls">
+      <div ref="joystick"></div>
+      <slider @zoom="onZoom" :init="zoom"></slider>
+    </v-layout>
     <v-dialog
             v-model="dialog"
             width="500"
@@ -32,16 +35,19 @@
   import nipplejs from "nipplejs";
   import * as Optional from "optional-js";
   import {mapState} from "vuex"
+  import Slider from './Slider'
 
   export default {
     name: "Editor",
     components: {
-      Options
+      Options,
+      Slider
     },
     data() {
       return {
         scene: this.$store.state.scene,
         camera: undefined,
+        zoom: 50,
         nippleDirection: Optional.empty(),
         joystick: null
       };
@@ -59,7 +65,34 @@
         files: state => state.files
       })
     },
+    // TODO ZOOM
     methods: {
+      initNipple() {
+        let _this = this;
+        this.joystick = nipplejs.create({
+          zone: _this.$refs.joystick,
+          mode: "static",
+          position: {
+            left: "100px",
+            bottom: "100px"
+          },
+          size: 100,
+          color: "blue"
+        });
+        this.joystick.on("move", (evt, data) => {
+          let alreadyPresent = _this.nippleDirection.isPresent();
+          _this.nippleDirection = Optional.ofNullable({
+            angle: data.angle.radian,
+            intensity: data.distance / 25
+          });
+          if (!alreadyPresent) {
+            _this.applyNippleDirectionOnCamera();
+          }
+        });
+        this.joystick.on("end", () => {
+          _this.nippleDirection = Optional.empty();
+        });
+      },
       applyNippleDirectionOnCamera() {
         this.nippleDirection.ifPresent(data => {
           // Rotate camera
@@ -70,11 +103,14 @@
               this.camera.angle -
               Math.sin(data.angle) * Math.min(data.intensity, 1);
 
-          // set timeout in order continu the rotation
+          // set timeout in order continue the rotation
           setTimeout(() => {
             this.applyNippleDirectionOnCamera();
           }, 5);
         });
+      },
+      onZoom (value) {
+        this.camera.distance = value
       },
       onClick(event) {
         this.$store.dispatch('deleteCube', {
@@ -88,32 +124,10 @@
       }
     },
     mounted() {
-      let _this = this;
-      this.joystick = nipplejs.create({
-        zone: _this.$refs.joystick,
-        mode: "static",
-        position: {
-          left: "100px",
-          bottom: "100px"
-        },
-        size: 100,
-        color: "blue"
-      });
-      this.joystick.on("move", (evt, data) => {
-        let alreadyPresent = _this.nippleDirection.isPresent();
-        _this.nippleDirection = Optional.ofNullable({
-          angle: data.angle.radian,
-          intensity: data.distance / 25
-        });
-        if (!alreadyPresent) {
-          _this.applyNippleDirectionOnCamera();
-        }
-      });
-      this.joystick.on("end", () => {
-        _this.nippleDirection = Optional.empty();
-      });
+      this.initNipple();
 
       this.camera = new Three.Camera(this.scene, this.$refs.canvas);
+      this.onZoom(this.zoom);
       this.camera.xAngle = 10;
 
       this.$store.commit('setCam', this.camera)
@@ -127,5 +141,9 @@
   };
 </script>
 
-<style>
+<style scoped>
+  .controls {
+    position: absolute;
+    top: 0;
+  }
 </style>

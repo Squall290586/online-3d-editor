@@ -13,10 +13,10 @@ class Scene extends Event {
     constructor() {
         // Call the super constructor of event
         super();
-
+        window.scene = this;
         // Init the scene
-        this._scene = new THREE.Scene();
-        this._scene.background = new THREE.Color(Colors.WHITE);
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(Colors.WHITE);
     }
 
     add(base) {
@@ -53,12 +53,26 @@ class Scene extends Event {
             .forEach(o => this.remove(o));
     }
 
+    export() {
+        window.THREE = THREE;
+        return import("three/examples/js/exporters/STLExporter")
+            .then(value => {
+                let exporter = new THREE.STLExporter();
+                let dataView = exporter.parse(this.scene, {binary: true});
+                return new Blob([dataView], {type: "application/sla"});
+            });
+    }
+
+    /**
+     *
+     * @return {THREE.Scene}
+     */
     get scene() {
         return this._scene;
     }
 
     set scene(scene) {
-        Utils.isInstanceOf(scene, Scene);
+        Utils.isInstanceOf(scene, THREE.Scene);
         this._scene = scene;
     }
 

@@ -56,7 +56,7 @@ class Scene extends Event {
     export() {
         window.THREE = THREE;
         return import("three/examples/js/exporters/STLExporter")
-            .then(value => {
+            .then(() => {
                 let exporter = new THREE.STLExporter();
                 let dataView = exporter.parse(this.scene, {binary: true});
                 return new Blob([dataView], {type: "application/sla"});

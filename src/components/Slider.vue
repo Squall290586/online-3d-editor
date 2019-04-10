@@ -31,9 +31,6 @@
           tooltip: 'none'
         }
       }
-    },
-    mounted() {
-      console.log(this.init)
     }
   }
 </script>

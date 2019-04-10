@@ -6,6 +6,9 @@ import store from "./store";
 import "./registerServiceWorker";
 import "./plugins/vuetify";
 import * as firebase from "firebase";
+import { VueHammer } from 'vue2-hammer'
+
+Vue.use(VueHammer)
 
 Vue.config.productionTip = false;
 

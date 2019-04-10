@@ -1,10 +1,10 @@
 <template>
   <div style="width: 100%; height: 100%; ">
     <options></options>
-    <div @mousedown="onClick" ref="canvas" style="width: 100%; height: 100%;"></div>
-    <v-layout column fill-height class="controls">
+    <div @mousedown="onClick" ref="canvas" style="width: 100%; height: 100%;" v-hammer:tap="onClick"></div>
+    <v-layout class="controls" column fill-height>
       <div ref="joystick"></div>
-      <slider @zoom="onZoom" :init="zoom"></slider>
+      <slider :init="zoom" @zoom="onZoom"></slider>
     </v-layout>
     <v-dialog
             v-model="dialog"
@@ -65,7 +65,6 @@
         files: state => state.files
       })
     },
-    // TODO ZOOM
     methods: {
       initNipple() {
         let _this = this;
@@ -109,16 +108,25 @@
           }, 5);
         });
       },
-      onZoom (value) {
+      onZoom(value) {
         this.camera.distance = value
       },
       onClick(event) {
+        let x;
+        let y;
+        if (event.type === 'tap') {
+          x = event.center.x;
+          y = event.center.y;
+        } else {
+          x = event.clientX;
+          y = event.clientY;
+        }
         this.$store.dispatch('addCube', {
           rayCasting: this
               .camera
               .rayCasting(
-                  (event.clientX / event.path[0].width) * 2 - 1,
-                  (event.clientY / event.path[0].height) * 2 - 1
+                  (x / this.$refs.canvas.clientWidth) * 2 - 1,
+                  (y / this.$refs.canvas.clientHeight) * 2 - 1
               )
         });
       }

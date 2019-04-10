@@ -120,6 +120,15 @@ class Base extends Event {
     }
 
     /**
+     * Clone this Object
+     *
+     * @return {Base}
+     */
+    clone() {
+        return new Base(this.object3d.clone(), this.position);
+    }
+
+    /**
      *
      * The position of the base.
      *
@@ -144,6 +153,7 @@ class Base extends Event {
      *
      * The THREE.Object3D
      *
+     * @return THREE.Object3D
      */
     get object3d() {
         return this._object3d;

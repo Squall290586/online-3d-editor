@@ -113,7 +113,7 @@
         this.camera.distance = value
       },
       onClick(event) {
-        this.$store.dispatch('deleteCube', {
+        this.$store.dispatch('addCube', {
           rayCasting: this
               .camera
               .rayCasting(

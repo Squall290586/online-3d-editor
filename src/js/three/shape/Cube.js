@@ -3,6 +3,9 @@ import * as Colors from "../characteristic/Colors";
 import {Base} from "../base/Base";
 
 class Cube extends Base {
+    // Attributs
+    _size;
+
     // Constructor
     constructor(size, position) {
         // Create the cube
@@ -26,6 +29,17 @@ class Cube extends Base {
 
         // Call super
         super(cube, position);
+
+        // set attributs
+        this._size = size;
+    }
+
+    clone() {
+        return new Cube(this.size, this.position);
+    }
+
+    get isSelected() {
+        return super.isSelected;
     }
 
     set isSelected(isSelected) {
@@ -33,8 +47,8 @@ class Cube extends Base {
         this.color = (isSelected) ? Colors.YELLOW : Colors.RED;
     }
 
-    get isSelected() {
-        return super.isSelected;
+    get size() {
+        return this._size;
     }
 }
 

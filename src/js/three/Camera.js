@@ -3,6 +3,8 @@ import * as THREE from "three";
 import * as Optional from "optional-js";
 import {Base} from "./base/Base";
 import {Scene} from "./Scene";
+import {RayCasting} from "./RayCasting";
+import {Vector} from "./characteristic";
 
 // Private
 function refresh(camera) {
@@ -36,6 +38,7 @@ class Camera extends Base {
 
         // create a group
         super(zAngleGroup);
+        window.camera = camera;
 
         // Set attributes
         this.scene = scene;
@@ -84,12 +87,13 @@ class Camera extends Base {
             .ofNullable(rayCaster.intersectObjects(this.scene.scene.children))
             .filter(v => v.length > 0)
             .map(v => v[0])
-            .map(v => this
-                ._scene
-                .items
-                .filter(b => b.object3d === v.object))
-            .filter(v => v.length > 0)
-            .map(v => v[0]);
+            .map(v => new RayCasting(
+                this
+                    ._scene
+                    .items
+                    .filter(b => b.object3d === v.object)
+                    [0],
+                new Vector(v.face.normal)));
     }
 
     /**

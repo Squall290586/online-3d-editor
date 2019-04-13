@@ -1,6 +1,3 @@
-import {Base} from "./base/Base";
-import {Vector} from "./characteristic/Vector";
-
 // Public
 class RayCasting {
     _object;

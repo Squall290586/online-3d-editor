@@ -1,7 +1,8 @@
-<template>
+<template xmlns:v-hammer="http://www.w3.org/1999/xhtml">
   <div style="width: 100%; height: 100%; ">
     <options></options>
-    <div @mousedown="onClick" ref="canvas" style="width: 100%; height: 100%;" v-hammer:tap="onClick"></div>
+    <tools></tools>
+    <div ref="canvas" style="width: 100%; height: 100%;" v-hammer:tap="onClick" v-hammer:pan="onMove"></div>
     <v-layout class="controls" column fill-height>
       <div ref="joystick"></div>
       <slider :init="zoom" @zoom="onZoom"></slider>
@@ -31,6 +32,7 @@
 
 <script>
   import Options from "./Options";
+  import Tools from "./Tools";
   import * as Three from "@/js/three";
   import nipplejs from "nipplejs";
   import * as Optional from "optional-js";
@@ -41,6 +43,7 @@
     name: "Editor",
     components: {
       Options,
+      Tools,
       Slider
     },
     data() {
@@ -57,7 +60,7 @@
         get() {
           return this.$store.state.chooseFile
         },
-        set(val) {
+        set() {
           this.$store.commit('setChooseFile', false)
         }
       },
@@ -121,7 +124,7 @@
           x = event.clientX;
           y = event.clientY;
         }
-        this.$store.dispatch('addCube', {
+        this.$store.dispatch('action', {
           rayCasting: this
               .camera
               .rayCasting(
@@ -129,6 +132,10 @@
                   (y / this.$refs.canvas.clientHeight) * 2 - 1
               )
         });
+      },
+      onMove(event) {
+        // TODO Move camera
+        debugger
       }
     },
     mounted() {

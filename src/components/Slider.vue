@@ -24,7 +24,7 @@
         options: {
           direction: "ttb",
           height: 200,
-          dotSize: 20,
+          dotSize: 30,
           interval: 10,
           min: 10,
           max: 100,

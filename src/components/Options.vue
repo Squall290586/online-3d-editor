@@ -104,33 +104,24 @@
       handleSelect(key) {
         switch (key) {
           case "disconnect":
-            this.signOut()
+            this.$store.dispatch("userSignOut")
+            break
+          case "new":
+            this.$store.dispatch("resetScene")
             break
           case "save":
-            this.save()
+            this.$store.dispatch("save")
             break
           case "open":
-            this.load()
+            this.$store.dispatch("load")
+            this.$store.dispatch("chooseFile")
             break
           case "print":
-            this.print()
+            this.$store.dispatch("print")
             break
           default:
             break
         }
-      },
-      signOut() {
-        this.$store.dispatch("userSignOut")
-      },
-      load() {
-        this.$store.dispatch("load")
-        this.$store.dispatch("chooseFile")
-      },
-      save() {
-        this.$store.dispatch("save")
-      },
-      print() {
-        this.$store.dispatch("print")
       }
     }
   };

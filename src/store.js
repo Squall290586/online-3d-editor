@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import Firebase from "firebase/app";
 import router from "@/router";
 import * as Three from "@/js/three";
-import {saveAs} from 'file-saver';
+import {HTTP} from 'http'
 
 Vue.use(Vuex);
 
@@ -21,7 +21,7 @@ const db = Firebase.firestore();
 
 export default new Vuex.Store({
   state: {
-    scene: new Three.Scene(),
+    scene: undefined,
     user: null,
     isAuthenticated: false,
     db: db,
@@ -36,6 +36,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setScene(state, scene) {
+      state.scene = scene;
+    },
     setUser(state, user) {
       state.user = user;
     },
@@ -120,6 +123,15 @@ export default new Vuex.Store({
         }
       }
     },
+    resetScene: (context) => {
+      context.state.scene.reset()
+      context.dispatch('initScene', {
+        unitSize: 4,
+        x: 5,
+        y: 1,
+        z: 10
+      })
+    },
     selectCube: (context, payload) => {
       payload.rayCasting.ifPresent(o => o.toggle());
     },
@@ -175,7 +187,10 @@ export default new Vuex.Store({
       context.state.scene
           .export()
           .then((value) => {
-            saveAs(value, 'file.stl');
+            // TODO Call API Octoprint avec Axios, BLOB = value
+            HTTP.post('/api/files/local/default/file.stl')
+                .then()
+                .catch()
           });
     }
   }

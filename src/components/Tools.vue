@@ -13,7 +13,7 @@
     name: "Tools",
     data() {
       return {
-        type: "remove",
+        type: this.$store.state.action,
         items: [
           {
             title: "Ajouter",

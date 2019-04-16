@@ -48,7 +48,6 @@
     },
     data() {
       return {
-        scene: this.$store.state.scene,
         camera: undefined,
         zoom: 50,
         nippleDirection: Optional.empty(),
@@ -65,7 +64,8 @@
         }
       },
       ...mapState({
-        files: state => state.files
+        files: state => state.files,
+        scene: state => state.scene
       })
     },
     methods: {
@@ -135,12 +135,12 @@
       },
       onMove(event) {
         // TODO Move camera
-        debugger
       }
     },
     mounted() {
       this.initNipple();
 
+      this.$store.commit('setScene', new Three.Scene())
       this.camera = new Three.Camera(this.scene, this.$refs.canvas);
       this.onZoom(this.zoom);
       this.camera.xAngle = 10;

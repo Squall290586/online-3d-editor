@@ -50,7 +50,9 @@ class Scene extends Event {
 
     reset() {
         this.items
-            .forEach(o => this.remove(o));
+            .forEach(o => {
+                if (o.camera !== window.camera) this.remove(o)
+            });
     }
 
     export() {

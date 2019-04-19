@@ -5,6 +5,7 @@ import {Base} from "./base/Base";
 import {Scene} from "./Scene";
 import {RayCasting} from "./RayCasting";
 import {Vector} from "./characteristic";
+import {Vector2} from 'three'
 
 // Private
 function refresh(camera) {
@@ -38,7 +39,6 @@ class Camera extends Base {
 
         // create a group
         super(zAngleGroup);
-        window.camera = camera;
 
         // Set attributes
         this.scene = scene;
@@ -259,6 +259,12 @@ class Camera extends Base {
         // Fire the events
         this.emit("change", this);
         this.emit("distance", this, this.distance);
+    }
+
+    setOffset(x, y) {
+        let size = this.renderer.getSize(new Vector2())
+        this.camera.setViewOffset(size.width, size.height, -x, -y, size.width, size.height)
+        refresh(this)
     }
 }
 

@@ -134,7 +134,7 @@
         });
       },
       onMove(event) {
-        // TODO Move camera
+        this.camera.setOffset(event.deltaX, event.deltaY)
       }
     },
     mounted() {

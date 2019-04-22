@@ -147,10 +147,10 @@
 
       this.$store.commit('setCam', this.camera)
       this.$store.dispatch('initScene', {
-        unitSize: 4,
-        x: 5,
-        y: 1,
-        z: 10
+        unitSize: 10,
+        x: 4,
+        y: 4,
+        z: 4
       });
     }
   };

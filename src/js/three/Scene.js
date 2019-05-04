@@ -129,18 +129,18 @@ class STLExporter {
 
                     let face = faces[j];
 
-                    vector.copy(face.normal).applyMatrix3(normalMatrixWorld).normalize();
+                    this.vector.copy(face.normal).applyMatrix3(normalMatrixWorld).normalize();
 
-                    output += '\tfacet normal ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
+                    output += '\tfacet normal ' + this.vector.x + ' ' + this.vector.y + ' ' + this.vector.z + '\n';
                     output += '\t\touter loop\n';
 
                     let indices = [face.a, face.b, face.c];
 
                     for (let k = 0; k < 3; k++) {
 
-                        vector.copy(vertices[indices[k]]).applyMatrix4(matrixWorld);
+                        this.vector.copy(vertices[indices[k]]).applyMatrix4(matrixWorld);
 
-                        output += '\t\t\tvertex ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
+                        output += '\t\t\tvertex ' + this.vector.x + ' ' + this.vector.y + ' ' + this.vector.z + '\n';
 
                     }
 
@@ -212,7 +212,6 @@ class Scene extends Event {
 
     export() {
         let exporter = new STLExporter();
-        debugger;
         let dataView = exporter.parse(this.scene, {binary: true});
         return new Promise((resolve) => resolve(new Blob([dataView], {type: "application/sla"})));
     }

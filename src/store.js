@@ -3,8 +3,7 @@ import Vuex from "vuex";
 import Firebase from "firebase/app";
 import router from "@/router";
 import * as Three from "@/js/three";
-import {HTTP} from '@/http'
-import { saveAs } from 'file-saver';
+import axios from 'axios'
 
 Vue.use(Vuex);
 
@@ -22,13 +21,19 @@ const db = Firebase.firestore();
 
 export default new Vuex.Store({
     state: {
+        octoprintHTTP: axios.create({
+            baseURL: 'http://192.168.0.23',
+            headers: {
+                'X-Api-Key': '6616E824967245928903C0BB014CF163'
+            }
+        }),
         scene: undefined,
         user: null,
         isAuthenticated: false,
         db: db,
         files: [],
         file: undefined,
-        chooseFile: false,
+        showUserSettings: false,
         action: 'add'
     },
     getters: {
@@ -37,6 +42,9 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        setOctoprintHTTP(state, octoprintHTTP) {
+            state.octoprintHTTP = octoprintHTTP;
+        },
         setScene(state, scene) {
             state.scene = scene;
         },
@@ -55,8 +63,8 @@ export default new Vuex.Store({
         addFile(state, file) {
             state.files.push(file);
         },
-        setChooseFile(state, val) {
-            state.chooseFile = val;
+        setShowUserSettings(state, val) {
+            state.showUserSettings = val;
         },
         setFile(state, file) {
             state.file = file
@@ -101,6 +109,18 @@ export default new Vuex.Store({
                     context.commit("setIsAuthenticated", false);
                     router.push("/");
                 });
+        },
+        showUserSettings: context => {
+            context.commit('setShowUserSettings', true);
+        },
+        applyUserSettings: (context, payload) => {
+            context.commit('setOctoprintHTTP', axios.create({
+                baseURL: 'http://' + payload.ip + '',
+                headers: {
+                    'X-Api-Key': payload.key
+                }
+            }));
+            context.commit('setShowUserSettings', false);
         },
         initScene: (context, payload) => {
             let sizeX = payload.unitSize * payload.x;
@@ -177,9 +197,6 @@ export default new Vuex.Store({
                 })
             })
         },
-        chooseFile: context => {
-            context.commit('setChooseFile', true)
-        },
         selectFile: (context, payload) => {
             context.commit('setFile', payload)
             context.commit('setChooseFile', false)
@@ -191,16 +208,17 @@ export default new Vuex.Store({
                     let data = new FormData();
                     data.append("file", value, "file.stl");
 
-                    saveAs(value, 'file.stl')
-
-                    HTTP
+                    context.state.octoprintHTTP
+                    // Slice the stl file
                         .post(
                             "/api/files/local",
                             data,
                             {
                                 headers: {'content-type': 'multipart/form-data'}
                             })
-                        .then(HTTP.post(
+
+                        // Print it
+                        .then(context.state.octoprintHTTP.post(
                             "/api/files/local/file.stl",
                             {
                                 "command": "slice",
@@ -209,9 +227,7 @@ export default new Vuex.Store({
                                 "printerProfile": "octoprint",
                                 "profile": "_default",
                                 "print": true
-                            }))
-
-                        .then((a1, a2, a3) => console.log(a1, a2, a3));
+                            }));
                 });
         }
     }

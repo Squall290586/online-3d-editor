@@ -1,139 +1,139 @@
 <template xmlns:v-hammer="http://www.w3.org/1999/xhtml">
-    <div style="width: 100%; height: 100%; ">
-        <options></options>
-        <tools></tools>
-        <user-settings></user-settings>
-        <div ref="canvas" style="width: 100%; height: 100%;" v-hammer:tap="onClick" v-hammer:pan="onMove"></div>
-        <v-layout class="controls" column fill-height>
-            <div ref="joystick"></div>
-            <slider :init="zoom" @zoom="onZoom"></slider>
-        </v-layout>
-    </div>
+  <div style="width: 100%; height: 100%; ">
+    <options @initShape="initShape"></options>
+    <tools></tools>
+    <user-settings></user-settings>
+    <div ref="canvas" style="width: 100%; height: 100%;" v-hammer:pan="onMove" v-hammer:tap="onClick"></div>
+    <v-layout class="controls" column fill-height>
+      <div ref="joystick"></div>
+      <slider :init="zoom" @zoom="onZoom" ref="zoom"></slider>
+    </v-layout>
+  </div>
 </template>
 
 <script>
-    import Options from "./Options";
-    import Tools from "./Tools";
-    import UserSettings from "./UserSettings";
-    import * as Three from "@/js/three";
-    import * as nippleJs from "nipplejs";
-    import * as Optional from "optional-js";
-    import {mapState} from "vuex"
-    import Slider from './Slider'
+  import Options from "./Options";
+  import Tools from "./Tools";
+  import UserSettings from "./UserSettings";
+  import * as Three from "@/js/three";
+  import * as nippleJs from "nipplejs";
+  import * as Optional from "optional-js";
+  import {mapState} from "vuex"
+  import Slider from './Slider'
 
-    export default {
-        name: "Editor",
-        components: {
-            Options,
-            Tools,
-            UserSettings,
-            Slider
-        },
-        data() {
-            return {
-                camera: undefined,
-                zoom: 50,
-                nippleDirection: Optional.empty(),
-                joystick: null
-            };
-        },
-        computed: {
-            ...mapState({
-                files: state => state.files,
-                scene: state => state.scene
-            })
-        },
-        methods: {
-            initNipple() {
-                let _this = this;
-                this.joystick = nippleJs.create({
-                    zone: _this.$refs.joystick,
-                    mode: "static",
-                    position: {
-                        left: "100px",
-                        bottom: "100px"
-                    },
-                    size: 100,
-                    color: "blue"
-                });
-                this.joystick.on("move", (evt, data) => {
-                    let alreadyPresent = _this.nippleDirection.isPresent();
-                    _this.nippleDirection = Optional.ofNullable({
-                        angle: data.angle.radian,
-                        intensity: data.distance / 25
-                    });
-                    if (!alreadyPresent) {
-                        _this.applyNippleDirectionOnCamera();
-                    }
-                });
-                this.joystick.on("end", () => {
-                    _this.nippleDirection = Optional.empty();
-                });
-            },
-            applyNippleDirectionOnCamera() {
-                this.nippleDirection.ifPresent(data => {
-                    // Rotate camera
-                    this.camera.rotation =
-                        this.camera.rotation -
-                        Math.cos(data.angle) * Math.min(data.intensity, 1);
-                    this.camera.angle =
-                        this.camera.angle -
-                        Math.sin(data.angle) * Math.min(data.intensity, 1);
+  export default {
+    name: "Editor",
+    components: {
+      Options,
+      Tools,
+      UserSettings,
+      Slider
+    },
+    data() {
+      return {
+        camera: undefined,
+        zoom: 50,
+        nippleDirection: Optional.empty(),
+        joystick: null
+      };
+    },
+    computed: {
+      ...mapState({
+        files: state => state.files,
+        scene: state => state.scene
+      })
+    },
+    methods: {
+      initNipple() {
+        let _this = this;
+        this.joystick = nippleJs.create({
+          zone: _this.$refs.joystick,
+          mode: "static",
+          position: {
+            left: "100px",
+            bottom: "100px"
+          },
+          size: 100,
+          color: "blue"
+        });
+        this.addEventNipple()
+      },
+      addEventNipple() {
+        let _this = this;
+        this.joystick.on("move", (evt, data) => {
+          let alreadyPresent = _this.nippleDirection.isPresent();
+          _this.nippleDirection = Optional.ofNullable({
+            angle: data.angle.radian,
+            intensity: data.distance / 25
+          });
+          if (!alreadyPresent) {
+            _this.applyNippleDirectionOnCamera();
+          }
+        });
+        this.joystick.on("end", () => {
+          _this.nippleDirection = Optional.empty();
+        });
+      },
+      applyNippleDirectionOnCamera() {
+        this.nippleDirection.ifPresent(data => {
+          // Rotate camera
+          this.camera.rotation =
+              this.camera.rotation -
+              Math.cos(data.angle) * Math.min(data.intensity, 1);
+          this.camera.angle =
+              this.camera.angle -
+              Math.sin(data.angle) * Math.min(data.intensity, 1);
 
-                    // set timeout in order continue the rotation
-                    setTimeout(() => {
-                        this.applyNippleDirectionOnCamera();
-                    }, 5);
-                });
-            },
-            onZoom(value) {
-                this.camera.distance = value
-            },
-            onClick(event) {
-                let x;
-                let y;
-                if (event.type === 'tap') {
-                    x = event.center.x;
-                    y = event.center.y;
-                } else {
-                    x = event.clientX;
-                    y = event.clientY;
-                }
-                this.$store.dispatch('action', {
-                    rayCasting: this
-                        .camera
-                        .rayCasting(
-                            (x / this.$refs.canvas.clientWidth) * 2 - 1,
-                            (y / this.$refs.canvas.clientHeight) * 2 - 1
-                        )
-                });
-            },
-            onMove(event) {
-                this.camera.setOffset(event.deltaX, event.deltaY)
-            }
-        },
-        mounted() {
-            this.initNipple();
-
-            this.$store.commit('setScene', new Three.Scene())
-            this.camera = new Three.Camera(this.scene, this.$refs.canvas);
-            this.onZoom(this.zoom);
-            this.camera.xAngle = 10;
-
-            this.$store.commit('setCam', this.camera)
-            this.$store.dispatch('initScene', {
-                unitSize: 10,
-                x: 4,
-                y: 4,
-                z: 4
-            });
+          // set timeout in order continue the rotation
+          setTimeout(() => {
+            this.applyNippleDirectionOnCamera();
+          }, 5);
+        });
+      },
+      onZoom(value) {
+        this.camera.distance = value
+      },
+      onClick(event) {
+        let x;
+        let y;
+        if (event.type === 'tap') {
+          x = event.center.x;
+          y = event.center.y;
+        } else {
+          x = event.clientX;
+          y = event.clientY;
         }
-    };
+        this.$store.dispatch('action', {
+          rayCasting: this
+              .camera
+              .rayCasting(
+                  (x / this.$refs.canvas.clientWidth) * 2 - 1,
+                  (y / this.$refs.canvas.clientHeight) * 2 - 1
+              )
+        });
+      },
+      onMove(event) {
+        this.camera.setOffset(event.deltaX, event.deltaY)
+      },
+      initShape() {
+        this.$refs.zoom.setValue(50)
+        this.onZoom(50)
+        this.$store.commit('setCam', this.camera)
+      }
+    },
+    mounted() {
+      this.initNipple();
+      this.$store.commit('setScene', new Three.Scene())
+      this.camera = new Three.Camera(this.scene, this.$refs.canvas);
+      this.$store.dispatch('initScene', this.$store.state.initShape);
+      this.initShape()
+    }
+  };
 </script>
 
 <style scoped>
-    .controls {
-        position: absolute;
-        top: 0;
-    }
+  .controls {
+    position: absolute;
+    top: 0;
+  }
 </style>

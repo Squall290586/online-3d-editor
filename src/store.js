@@ -147,7 +147,7 @@ export default new Vuex.Store({
         resetScene: (context) => {
             context.state.scene.reset()
             context.dispatch('initScene', {
-                unitSize: 4,
+                unitSize: 5,
                 x: 5,
                 y: 1,
                 z: 10

@@ -122,7 +122,7 @@
 
             this.$store.commit('setCam', this.camera)
             this.$store.dispatch('initScene', {
-                unitSize: 10,
+                unitSize: 5,
                 x: 4,
                 y: 4,
                 z: 4

@@ -1,7 +1,7 @@
 <template>
   <v-layout column pa-3>
     <v-icon class="unselectable">zoom_in</v-icon>
-    <vue-slider v-bind="options" v-model="value" @change="$emit('zoom', $event)" class="py-3"></vue-slider>
+    <vue-slider @change="$emit('zoom', $event)" class="py-3" v-bind="options" v-model="value"></vue-slider>
     <v-icon class="unselectable">zoom_out</v-icon>
   </v-layout>
 </template>
@@ -18,7 +18,7 @@
     props: [
       "init"
     ],
-    data () {
+    data() {
       return {
         value: this.init,
         options: {
@@ -30,6 +30,11 @@
           max: 100,
           tooltip: 'none'
         }
+      }
+    },
+    methods: {
+      setValue(val) {
+        this.value = val
       }
     }
   }

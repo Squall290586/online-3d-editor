@@ -1,4 +1,4 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
     <v-dialog
             v-model="dialog"
             width="500">
@@ -15,9 +15,9 @@
                             <v-text-field
                                     :rules="[ipValidation]"
                                     v-model="values[0]">
-                                <template v-slot:label>
-                                    192.168.0.25
-                                </template>
+                                <div slot="label">
+                                    {{$store.state.octoprintHTTP.defaults.baseURL}}
+                                </div>
                             </v-text-field>
                             <span class="caption grey--text text--darken-1">
                         This is the IP of your Octoprint instance.
@@ -29,9 +29,9 @@
                             <v-text-field
                                     :rules="[keyValidation]"
                                     v-model="values[1]">
-                                <template v-slot:label>
-                                    6616E824967245928903C0BB014CF163
-                                </template>
+                                <div slot="label">
+                                    {{$store.state.octoprintHTTP.defaults.headers['X-Api-Key']}}
+                                </div>
                             </v-text-field>
                             <span class="caption grey--text text--darken-1">
                         This is the API key of your Octoprint instance.
@@ -43,10 +43,16 @@
 
             <v-card-actions>
                 <v-btn
-                        :disabled="step === 0"
+                        v-if="step > 0"
                         flat
                         @click="step--">
                     Précédent
+                </v-btn>
+                <v-btn
+                        v-else
+                        flat
+                        @click="dialog = false">
+                    Annuler
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn

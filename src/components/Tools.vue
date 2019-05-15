@@ -17,12 +17,12 @@
         items: [
           {
             title: "Ajouter",
-            icon: "add",
+            icon: "mdi-pencil-plus",
             action: "add"
           },
           {
             title: "Supprimer",
-            icon: "remove",
+            icon: "mdi-pencil-minus",
             action: "remove"
           }
         ]
